@@ -1,0 +1,16 @@
+{
+    "name": "RvoFramework",
+    "rootNamespace": "",
+    "references": [
+        "GUID:beffe37613fc6c548abe42876aea03cb"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": true,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
