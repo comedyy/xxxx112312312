@@ -471,6 +471,11 @@ namespace Game.Battle.CommonLib
         /// </summary>
         public static void DoStep()
         {
+            if(_msPathThread == null)
+            {
+                throw new Exception("MSPathThread is null");
+            }
+
             _msPathThread?.DoStep();
         }
         

@@ -2,12 +2,13 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Game.Battle.CommonLib;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class Main : MonoBehaviour
 {
     List<int> allInts = new List<int>();
-    List<Vector3> allPoint = new List<Vector3>();
+    List<float3> allPoint = new List<float3>();
     public InstanceDrawer instanceDrawer;
     public Transform targetTransform;
 
@@ -19,7 +20,7 @@ public class Main : MonoBehaviour
         for (int i = 0; i < 1000; i++)
         {
             allInts.Add(MSPathSystem.AddAgentCS(0, i, 1, 3, 5, fp._0_05, fp._0_05, 1, 5, 1, 0, 0, i));
-            allPoint.Add(new Vector3(i, 0, 1)); 
+            allPoint.Add(new float3(i, 0, 1)); 
         }
     }
 
@@ -29,14 +30,14 @@ public class Main : MonoBehaviour
     void Update()
     {
         _frameCount++;
-        RvoStepUpdater.UpdateRVO(_frameCount);
+        RvoStepUpdater.UpdateRVO();
 
         // 获取到每个对象的位置。
         GetPosFromRVO(allInts, allPoint);
 
         UpdateDirs();
 
-        RvoStepUpdater.DoStepRVO(_frameCount);
+        RvoStepUpdater.DoStepRVO();
 
         instanceDrawer.Update1(allPoint);
 
@@ -62,26 +63,20 @@ public class Main : MonoBehaviour
 
     private void UpdateDirs()
     {
-        // for (int i = 0; i < allInts.Count; i++)
-        // {
-        //     var pos = allPoint[i];
-        //     var dir = (targetTransform.position - new Vector3(pos.x, 0, pos.y)).normalized * 3;
-        //     MSPathSystem.SetAgentVelocityPrefCS(0, allInts[i], (fp)dir.x, (fp)dir.z);
-        // }
-        foreach(var x in allInts)
+        for (int i = 0; i < allInts.Count; i++)
         {
-            var pos = MSPathSystem.GetAgentPositionCS(0, x);
-            var dir = (targetTransform.position - new Vector3(pos.x, 0, pos.y)).normalized * 3;
-            MSPathSystem.SetAgentVelocityPrefCS(0, x, (fp)dir.x, (fp)dir.z);
+            var pos = allPoint[i];
+            var dir = math.normalize((float3)targetTransform.position - new float3(pos.x, 0, pos.z)) * 3;
+            MSPathSystem.SetAgentVelocityPrefCS(0, allInts[i], (fp)dir.x, (fp)dir.z);
         }
     }
 
-    private void GetPosFromRVO(List<int> allInts, List<Vector3> allPois)
+    private void GetPosFromRVO(List<int> allInts, List<float3> allPois)
     {
         for (int i = 0; i < allInts.Count; i++)
         {
             var pos = MSPathSystem.GetAgentPositionCS(0, allInts[i]);
-            allPois[i] = new Vector3(pos.x, 0, pos.y);
+            allPois[i] = new float3(pos.x, 0, pos.y);
         }
     }
 }

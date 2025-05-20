@@ -18,9 +18,9 @@ public class InstanceDrawer : MonoBehaviour
         m_MaterialPropertyBlock = new MaterialPropertyBlock();
     }
 
-    public void Update1(List<Vector3> vector3s)
+    public void Update1(List<float3> vector3s)
     {
-        if(m_ObjectPositionBuffer == null)
+        if (m_ObjectPositionBuffer == null)
         {
             Init();
         }
@@ -36,7 +36,7 @@ public class InstanceDrawer : MonoBehaviour
         {
             array[i] = vector3s[i];
         }
-        
+
         m_ObjectPositionBuffer.SetData(array, 0, 0, count);
 
         UnityEngine.Profiling.Profiler.EndSample();

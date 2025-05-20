@@ -2,9 +2,9 @@
 using Game.BattleShare.ECS.SystemGroup;
 // 逻辑往这里插入，修改agent的朝向。
 
-public partial class RvoChangeAgentVectorSystemGroup : BaseUnsortSystemGroup
+public partial class RvoCustomAgentPropertySystemGroup : BaseUnsortSystemGroup
 {
-    public RvoChangeAgentVectorSystemGroup()
+    public RvoCustomAgentPropertySystemGroup()
     {
         EnableSystemSorting = false;
     }

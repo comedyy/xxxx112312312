@@ -1,3 +1,4 @@
+using Game.Battle.CommonLib;
 using Unity.Entities;
 
 public partial class RvoDoStepSystem : SystemBase
@@ -10,12 +11,7 @@ public partial class RvoDoStepSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        // Perform the logic to sync positions from RVO here
-        // This is where you would implement the logic to sync positions from RVO
-        // For example, you might call a method to update the positions of entities based on RVO calculations
-
-        UnityEngine.Debug.Log("RvoDoStepSystem OnUpdate");
-
+        RvoStepUpdater.DoStepRVO();
     }
     
 }
