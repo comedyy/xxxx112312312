@@ -10,13 +10,20 @@ public class BattleLogic
         // Initialize the battle logic here
         _world = new World("battleWorld");
 
+        InitializationSystemGroup initializationSystemGroup = _world.GetOrCreateSystemManaged<InitializationSystemGroup>();
+        initializationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<UpdateLocalFrameSystem>());
+
+        LocalFrame localFrame = new LocalFrame(fp._0_05, 0, BattleType.Client);
+
         // Create the system groups
         SimulationSystemGroup simulationSystemGroup = _world.GetOrCreateSystemManaged<SimulationSystemGroup>();
-        var fixedTimeSystemGroup = _world.CreateSystemManaged<FixedTimeSystemGroup>();
-        simulationSystemGroup.AddSystemToUpdateList(fixedTimeSystemGroup);
-        fixedTimeSystemGroup.AddSystemToUpdateList(_world.CreateSystem<PreRvoSystemGroup>());
-        fixedTimeSystemGroup.AddSystemToUpdateList(_world.CreateSystem<RvoSystemGroup>());
-        fixedTimeSystemGroup.AddSystemToUpdateList(_world.CreateSystem<AfterRvoSystemGroup>());
+        var logicSystemGroup = _world.CreateSystemManaged<LogicUpdateSystemGroup>();
+        simulationSystemGroup.AddSystemToUpdateList(logicSystemGroup);
+        logicSystemGroup.Inject(localFrame);
+
+        logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<PreRvoSystemGroup>());
+        logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<RvoSystemGroup>());
+        logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<AfterRvoSystemGroup>());
 
         PresentationSystemGroup presentationSystemGroup = _world.GetOrCreateSystemManaged<PresentationSystemGroup>();
         var unsortedPresentationSystemGroup = _world.CreateSystemManaged<UnsortedPresentationSystemGroup>();
