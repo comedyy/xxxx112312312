@@ -7,6 +7,11 @@ public class BattleLogic
 {
     World _world;
 
+    public void Dispose()
+    {
+        _world.Dispose();
+    }
+
     public void Initialize(BattleStartMessage battleStartMessage)
     {
         // Initialize the battle logic here
@@ -28,7 +33,7 @@ public class BattleLogic
         var inputSystem = _world.CreateSystemManaged<InputUserSystem>();
         inputSystem.fetchFrame = localFrame.syncFrameInputCache;
         logicSystemGroup.AddSystemToUpdateList(inputSystem);
-        
+
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<PreRvoSystemGroup>());
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<RvoSystemGroup>());
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<AfterRvoSystemGroup>());

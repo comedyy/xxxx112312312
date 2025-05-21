@@ -14,6 +14,11 @@ public partial class ControllerUserSystem : SystemBase
             return;
         }
 
+        if (SystemAPI.GetSingleton<ComGameState>().IsEnd)
+        {
+            return;
+        }
+
         var gameObjectrComponent = EntityManager.GetComponentObject<GameobjectrComponent>(entity);
         var moveSpeedComponet = EntityManager.GetComponentData<UserMoveSpeedComponet>(entity);
         gameObjectrComponent.gameObject.transform.position = gameObjectrComponent.gameObject.transform.position += UnityEngine.Time.deltaTime * moveSpeedComponet.speed * dir;

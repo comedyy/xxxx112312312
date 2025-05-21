@@ -14,6 +14,12 @@ public class MainEcs : MonoBehaviour
         game.Initialize();
     }
 
+    private void OnDestroy()
+    {
+        game.Dispose();
+        game = null;
+    }
+
     // List<Vector3> allPoint = new List<Vector3>();
     // void Update()
     // {

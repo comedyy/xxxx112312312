@@ -15,13 +15,23 @@ public class OneBattle
         // Initialize the battle logic here
         Debug.Log("Battle Initialized");
 
-        _battleLogic.Initialize(new BattleStartMessage() {  seed = 12345678 });
+        _battleLogic.Initialize(new BattleStartMessage() { seed = 12345678 });
 
         // Add my system to the battle logic
         World world = World.DefaultGameObjectInjectionWorld;
         world.GetOrCreateSystemManaged<PreRvoSystemGroup>().AddSystemToUpdateList(world.GetOrCreateSystem<InitAddAgentsSystem>());
-        
+
         world.GetOrCreateSystemManaged<RvoCustomAgentPropertySystemGroup>()
             .AddSystemToUpdateList(world.GetOrCreateSystem<ChangeRvoParamSystem>());
+
+        world.GetOrCreateSystemManaged<AfterRvoSystemGroup>().AddSystemToUpdateList(world.GetOrCreateSystem<TimeoutFinishGameSystem>());
+    }
+
+
+    public void Dispose()
+    {
+        // Dispose of the battle logic here
+        Debug.Log("Battle Disposed");
+        _battleLogic.Dispose();
     }
 }
