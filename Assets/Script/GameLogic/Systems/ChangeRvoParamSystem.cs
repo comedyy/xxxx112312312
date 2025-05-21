@@ -12,10 +12,13 @@ public partial class ChangeRvoParamSystem : SystemBase
 
     protected override void OnUpdate()
     {
+        var entity = SystemAPI.GetSingletonEntity<UserMoveSpeedComponet>();
+        var posHero = EntityManager.GetComponentData<LTransform>(entity).position;
+
         Entities.ForEach((ref RvoComponent rvo, in LTransform transform) =>
         {
             var pos = transform.position;
-            var dir = fpMath.normalize(- new fp3(pos.x, 0, pos.z)) * 3;
+            var dir = fpMath.normalize(posHero - new fp3(pos.x, 0, pos.z)) * 3;
             MSPathSystem.SetAgentVelocityPrefCS(rvo.AgentType, rvo.AgentId, dir.x, dir.z);
         }).Run();
     }

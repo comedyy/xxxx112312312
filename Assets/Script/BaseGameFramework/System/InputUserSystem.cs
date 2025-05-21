@@ -37,8 +37,8 @@ public partial class InputUserSystem : SystemBase
                 return;
             }
 
-            var x = EntityManager.GetComponentData<LTransform>(entity);
-            x.position = new Deterministics.Math.fp3(positionInput.x, 0, positionInput.z);
+            var x = SystemAPI.GetComponentRW<LTransform>(entity);
+            x.ValueRW.position = new Deterministics.Math.fp3(positionInput.x, 0, positionInput.z);
 
             // var gameObjectrComponent = EntityManager.GetComponentObject<GameobjectrComponent>(entity);
             // gameObjectrComponent.gameObject.transform.position = new UnityEngine.Vector3(positionInput.x, 0, positionInput.z);

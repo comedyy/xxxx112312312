@@ -24,6 +24,7 @@ public class BattleLogic
         var logicSystemGroup = _world.CreateSystemManaged<LogicUpdateSystemGroup>();
         simulationSystemGroup.AddSystemToUpdateList(logicSystemGroup);
         logicSystemGroup.Inject(localFrame);
+        logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<InputUserSystem>());
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<PreRvoSystemGroup>());
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<RvoSystemGroup>());
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<AfterRvoSystemGroup>());
