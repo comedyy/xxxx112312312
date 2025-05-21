@@ -9,7 +9,7 @@ public partial class DrawEntitySystem : SystemBase
     protected override void OnUpdate()
     {
         NativeList<float3> positions = new NativeList<float3>(1, Allocator.TempJob);
-        Entities.ForEach((ref Entity entity, ref LTransformComponent trans) =>
+        Entities.ForEach((ref Entity entity, ref VTransform trans) =>
         {
             // Perform drawing logic here
             // For example, you might want to set a component or call a method to render the entity

@@ -12,7 +12,7 @@ public partial class ChangeRvoParamSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        Entities.ForEach((ref RvoComponent rvo, in LTransformComponent transform) =>
+        Entities.ForEach((ref RvoComponent rvo, in LTransform transform) =>
         {
             var pos = transform.position;
             var dir = fpMath.normalize(- new fp3(pos.x, 0, pos.z)) * 3;

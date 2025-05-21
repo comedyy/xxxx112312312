@@ -1,5 +1,6 @@
 using Deterministics.Math;
 using Unity.Core;
+using Unity.Entities;
 
 namespace Game.BattleShare.ECS.SystemGroup
 {
@@ -13,14 +14,17 @@ namespace Game.BattleShare.ECS.SystemGroup
     
         protected override void OnUpdate()
         {
+            ref var frameCount = ref SystemAPI.GetSingletonRW<ComFrameCount>().ValueRW;
             int needFrame = GetNeedCalFrame(_localFrame);
             for(int i = 0; i < needFrame; i++)
             {
-                if(_localFrame.BattleEnd) return; // 游戏已经结束
-                
-                _localFrame.ElapsedTime += _localFrame.DeltaTime;
-                _localFrame.changeFramePresentaionTime = UnityEngine.Time.time;
-                _localFrame.GameFrame ++;
+                var gameStateCom = SystemAPI.GetSingleton<ComGameState>();
+                if (gameStateCom.IsEnd) break;
+
+                frameCount.currentFrame++;
+                frameCount.frameUnity = UnityEngine.Time.frameCount;
+
+                _localFrame.GameFrame = frameCount.currentFrame;
 
                 base.OnUpdate();  // Update
             }

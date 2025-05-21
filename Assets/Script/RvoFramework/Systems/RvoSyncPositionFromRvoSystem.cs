@@ -14,13 +14,13 @@ public partial class RvoSyncPositionFromRvoSystem : SystemBase
         base.OnCreate();
         // Initialize the system here if needed
 
-        _entityQuery = GetEntityQuery(ComponentType.ReadOnly<RvoComponent>(), ComponentType.ReadOnly<LTransformComponent>());
+        _entityQuery = GetEntityQuery(ComponentType.ReadOnly<RvoComponent>(), ComponentType.ReadOnly<LTransform>());
     }
 
     protected override void OnUpdate()
     {
         GetPositionFromRvoJob job = new GetPositionFromRvoJob(){
-            TranslationChunkType = GetComponentTypeHandle<LTransformComponent>(),
+            TranslationChunkType = GetComponentTypeHandle<LTransform>(),
             AgentChunkType = GetComponentTypeHandle<RvoComponent>(),
             Min = default, Max = default, ignoreRVOSize = default
         };
@@ -31,7 +31,7 @@ public partial class RvoSyncPositionFromRvoSystem : SystemBase
     [BurstCompile]
     struct GetPositionFromRvoJob : IJobChunk
     {
-        public ComponentTypeHandle<LTransformComponent> TranslationChunkType;
+        public ComponentTypeHandle<LTransform> TranslationChunkType;
         public ComponentTypeHandle<RvoComponent> AgentChunkType;
         [ReadOnly] public fp2 Min;
         [ReadOnly] public fp2 Max;
