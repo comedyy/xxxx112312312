@@ -32,14 +32,11 @@ public class LocalFrameClientInsance : ILocalFrame
     private void AddLocalFrame()
     {
         _localFrame.ReceivedServerFrame++;
-        if(_localFrame._inputStructs.Count > 0)
+
+        var ok = _localFrame._inputCache.FetchItem(out var item);
+        if (ok)
         {
-            var messageItem = new MessageItem
-            {
-                inputList = _localFrame._inputStructs,
-            };
-            _localFrame._allMessage.Add(_localFrame.ReceivedServerFrame, new List<MessageItem> { messageItem });
-            _localFrame._inputStructs = new List<IInputStruct>();
+            _localFrame.syncFrameInputCache.AddLocalFrame(_localFrame.ReceivedServerFrame, item);
         }
     }
 }

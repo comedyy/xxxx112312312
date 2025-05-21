@@ -1,15 +1,23 @@
 using System;
 using System.Collections.Generic;
 using Unity.Entities;
+public interface IFetchFrame
+{
+    void GetAllMessage(int frame, List<MessageItem> messageItems);
+    void AddLocalFrame(int frame, MessageItem item);
+}
 
 public partial class InputUserSystem : SystemBase
 {
     List<MessageItem> _fetchInputList = new List<MessageItem>();
     Dictionary<int, Action<IInputStruct>> _overrideActions = new Dictionary<int, Action<IInputStruct>>();
+    public IFetchFrame fetchFrame;
 
     protected override void OnUpdate()
     {
-        LocalFrame.Instance.GetFrameInput(_fetchInputList);
+        var frameComponent =  SystemAPI.GetSingleton<ComFrameCount>();
+        _fetchInputList.Clear();
+        fetchFrame.GetAllMessage(frameComponent.currentFrame, _fetchInputList);
 
         foreach (var x in _fetchInputList)
         {

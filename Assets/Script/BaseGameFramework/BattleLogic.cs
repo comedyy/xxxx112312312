@@ -24,7 +24,11 @@ public class BattleLogic
         var logicSystemGroup = _world.CreateSystemManaged<LogicUpdateSystemGroup>();
         simulationSystemGroup.AddSystemToUpdateList(logicSystemGroup);
         logicSystemGroup.Inject(localFrame);
-        logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<InputUserSystem>());
+
+        var inputSystem = _world.CreateSystemManaged<InputUserSystem>();
+        inputSystem.fetchFrame = localFrame.syncFrameInputCache;
+        
+        logicSystemGroup.AddSystemToUpdateList(inputSystem);
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<PreRvoSystemGroup>());
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<RvoSystemGroup>());
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<AfterRvoSystemGroup>());
@@ -44,6 +48,8 @@ public class BattleLogic
         AddUser();
         World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(ComFrameCount));
         World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(ComGameState));
+        var randomEntity = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(ComRandom));
+        World.DefaultGameObjectInjectionWorld.EntityManager.SetComponentData(randomEntity, new ComRandom { random = new fpRandom(1000) });
     }
 
     private void AddUser()
