@@ -15,7 +15,7 @@ public class OneBattle
         // Initialize the battle logic here
         Debug.Log("Battle Initialized");
 
-        _battleLogic.Initialize();
+        _battleLogic.Initialize(new BattleStartMessage() {  seed = 12345678 });
 
         // Add my system to the battle logic
         World world = World.DefaultGameObjectInjectionWorld;

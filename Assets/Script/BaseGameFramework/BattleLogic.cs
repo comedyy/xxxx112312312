@@ -7,7 +7,7 @@ public class BattleLogic
 {
     World _world;
 
-    public void Initialize()
+    public void Initialize(BattleStartMessage battleStartMessage)
     {
         // Initialize the battle logic here
         _world = new World("battleWorld");
@@ -27,8 +27,8 @@ public class BattleLogic
 
         var inputSystem = _world.CreateSystemManaged<InputUserSystem>();
         inputSystem.fetchFrame = localFrame.syncFrameInputCache;
-        
         logicSystemGroup.AddSystemToUpdateList(inputSystem);
+        
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<PreRvoSystemGroup>());
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<RvoSystemGroup>());
         logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<AfterRvoSystemGroup>());
@@ -49,7 +49,7 @@ public class BattleLogic
         World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(ComFrameCount));
         World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(ComGameState));
         var randomEntity = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(ComRandom));
-        World.DefaultGameObjectInjectionWorld.EntityManager.SetComponentData(randomEntity, new ComRandom { random = new fpRandom(1000) });
+        World.DefaultGameObjectInjectionWorld.EntityManager.SetComponentData(randomEntity, new ComRandom { random = new fpRandom(battleStartMessage.seed) });
     }
 
     private void AddUser()
