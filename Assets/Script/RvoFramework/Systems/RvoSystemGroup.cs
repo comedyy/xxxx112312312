@@ -1,5 +1,4 @@
 using Game.Battle.CommonLib;
-using Game.BattleShare.ECS.SystemGroup;
 
 public partial class RvoSystemGroup : BaseUnsortSystemGroup
 {

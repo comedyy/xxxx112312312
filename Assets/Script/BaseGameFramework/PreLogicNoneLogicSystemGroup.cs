@@ -1,4 +1,4 @@
-public partial class UnsortedPresentationSystemGroup : BaseUnsortSystemGroup
+public partial class PreLogicNoneLogicSystemGroup : BaseUnsortSystemGroup
 {
 
     protected override void OnUpdate()

@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using Game.BattleShare.ECS.SystemGroup;
 using Unity.Collections;
 using Unity.Entities;
 using Unity.Mathematics;

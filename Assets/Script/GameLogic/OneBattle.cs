@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Entities;
@@ -15,7 +16,7 @@ public class OneBattle
         // Initialize the battle logic here
         Debug.Log("Battle Initialized");
 
-        _battleLogic.Initialize(new BattleStartMessage() { seed = 12345678 });
+        _battleLogic.Initialize(new BattleStartMessage() { seed = 12345678, guid = Guid.NewGuid().ToString() });
 
         // Add my system to the battle logic
         World world = World.DefaultGameObjectInjectionWorld;

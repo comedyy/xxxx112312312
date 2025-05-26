@@ -4,6 +4,7 @@ using LiteNetLib.Utils;
 public struct BattleStartMessage : INetSerializable
 {
     public uint seed;
+    public string guid;
 
     public void Deserialize(NetDataReader reader)
     {

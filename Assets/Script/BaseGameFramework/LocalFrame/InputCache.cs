@@ -30,14 +30,14 @@ public class InputCache
         _inputStructs.Add(x);
     }
 
-    public bool FetchItem(out MessageItem messageItem)
+    public bool FetchItem(out UserFrameInput messageItem)
     {
         if(_inputStructs.Count == 0)
         {
             messageItem = default;
             return false;
         }
-        messageItem = new MessageItem
+        messageItem = new UserFrameInput
         {
             inputList = _inputStructs,
             id = _controllerId,

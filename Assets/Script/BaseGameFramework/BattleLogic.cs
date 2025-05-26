@@ -1,6 +1,6 @@
 using System;
+using System.Collections.Generic;
 using Deterministics.Math;
-using Game.BattleShare.ECS.SystemGroup;
 using Unity.Entities;
 
 public class BattleLogic
@@ -19,42 +19,86 @@ public class BattleLogic
 
         LocalFrame localFrame = new LocalFrame(0, BattleType.Client);
 
-        // init
-        InitializationSystemGroup initializationSystemGroup = _world.GetOrCreateSystemManaged<InitializationSystemGroup>();
-        initializationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<ControllerUserSystem>());
-        initializationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<UpdateLocalFrameSystem>());
+        var systemGroup = _world.GetOrCreateSystemManaged<BattleRootSystemGroup>();
+        CreateSystemByList(_world, systemGroup, EcsSystemList.nodeDescriptorList);
+        InjectSystem(localFrame);
 
-        // simulation
-        SimulationSystemGroup simulationSystemGroup = _world.GetOrCreateSystemManaged<SimulationSystemGroup>();
-        var logicSystemGroup = _world.CreateSystemManaged<LogicUpdateSystemGroup>();
-        simulationSystemGroup.AddSystemToUpdateList(logicSystemGroup);
-        logicSystemGroup.Inject(localFrame);
+        // // init
+        // InitializationSystemGroup initializationSystemGroup = _world.GetOrCreateSystemManaged<InitializationSystemGroup>();
+        // initializationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<ControllerUserSystem>());
+        // initializationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<UpdateLocalFrameSystem>());
 
-        var inputSystem = _world.CreateSystemManaged<InputUserSystem>();
-        inputSystem.fetchFrame = localFrame.syncFrameInputCache;
-        logicSystemGroup.AddSystemToUpdateList(inputSystem);
+        // // simulation
+        // SimulationSystemGroup simulationSystemGroup = _world.GetOrCreateSystemManaged<SimulationSystemGroup>();
+        // var logicSystemGroup = _world.CreateSystemManaged<LogicUpdateSystemGroup>();
+        // simulationSystemGroup.AddSystemToUpdateList(logicSystemGroup);
+        // logicSystemGroup.Inject(localFrame);
 
-        logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<PreRvoSystemGroup>());
-        logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<RvoSystemGroup>());
-        logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<AfterRvoSystemGroup>());
+        // var inputSystem = _world.CreateSystemManaged<InputUserSystem>();
+        // inputSystem.fetchFrame = localFrame.syncFrameInputCache;
+        // logicSystemGroup.AddSystemToUpdateList(inputSystem);
 
-        // presentation
-        PresentationSystemGroup presentationSystemGroup = _world.GetOrCreateSystemManaged<PresentationSystemGroup>();
-        var unsortedPresentationSystemGroup = _world.CreateSystemManaged<UnsortedPresentationSystemGroup>();
-        presentationSystemGroup.AddSystemToUpdateList(unsortedPresentationSystemGroup);
+        // logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<PreRvoSystemGroup>());
+        // logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<RvoSystemGroup>());
+        // logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<AfterRvoSystemGroup>());
 
-        unsortedPresentationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<VLerpTransformSystem>());
-        unsortedPresentationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<DrawEntitySystem>());
+        // // logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<WritePlaybackDataSystem>());
+
+        // // presentation
+        // PresentationSystemGroup presentationSystemGroup = _world.GetOrCreateSystemManaged<PresentationSystemGroup>();
+        // var unsortedPresentationSystemGroup = _world.CreateSystemManaged<UnsortedPresentationSystemGroup>();
+        // presentationSystemGroup.AddSystemToUpdateList(unsortedPresentationSystemGroup);
+
+        // unsortedPresentationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<VLerpTransformSystem>());
+        // unsortedPresentationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<DrawEntitySystem>());
 
         World.DefaultGameObjectInjectionWorld = _world;
         ScriptBehaviourUpdateOrder.AppendWorldToCurrentPlayerLoop(_world);
 
         // Add User
         AddUser();
-        World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(ComFrameCount));
-        World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(ComGameState));
-        var randomEntity = World.DefaultGameObjectInjectionWorld.EntityManager.CreateEntity(typeof(ComRandom));
-        World.DefaultGameObjectInjectionWorld.EntityManager.SetComponentData(randomEntity, new ComRandom { random = new fpRandom(battleStartMessage.seed) });
+        _world.EntityManager.CreateSingleton(new ComFrameCount());
+        _world.EntityManager.CreateSingleton(new ComGameState());
+        _world.EntityManager.CreateSingleton(new ComRandom { random = new fpRandom(battleStartMessage.seed) });
+
+        // Add Controller 
+        BattleControllerMgr.Instance.AddController(new BattleDataController(battleStartMessage));
+        BattleControllerMgr.Instance.AddController(new PlaybackController(battleStartMessage.guid, PlaybackMode.Write));
+        BattleControllerMgr.Instance.AddController(new CheckSumMgr());
+    }
+
+    private void InjectSystem(LocalFrame localFrame)
+    {
+        var logicSystemGroup = _world.GetOrCreateSystemManaged<LogicUpdateSystemGroup>();
+        logicSystemGroup.Inject(localFrame);
+
+        var inputSystem = _world.GetOrCreateSystemManaged<InputUserSystem>();
+        inputSystem.fetchFrame = localFrame.syncFrameInputCache;
+    }
+
+    private void CreateSystemByList(World world, ComponentSystemGroup systemGroup, List<EcsSystemNodeDescriptor> nodeDescriptorList)
+    {
+        foreach (var node in nodeDescriptorList)
+        {
+            if (node.rootType == null) continue;
+
+            var system = world.GetOrCreateSystemManaged(node.rootType);
+            if (system == null)
+            {
+                UnityEngine.Debug.LogError($"Failed to create system for type: {node.rootType}");
+                continue;
+            }
+
+            if (systemGroup != null)
+            {
+                systemGroup.AddSystemToUpdateList(system);
+            }
+
+            if (node.list != null && node.list.Count > 0)
+            {
+                CreateSystemByList(world, (ComponentSystemGroup)system, node.list);
+            }
+        }
     }
 
     private void AddUser()

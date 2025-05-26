@@ -14,20 +14,20 @@ class SyncFrameCache : IFetchFrame
         }
     }
 
-    protected Dictionary<int , List<MessageItem>> _allMessage = new Dictionary<int, List<MessageItem>>();
-    public void GetAllMessage(int frame, List<MessageItem> listOut)
+    protected Dictionary<int , List<UserFrameInput>> _allMessage = new Dictionary<int, List<UserFrameInput>>();
+    public void GetAllMessage(int frame, List<UserFrameInput> listOut)
     {
         if(_allMessage.TryGetValue(frame, out var list))
         {
             listOut.AddRange(list);
-            ListPool<MessageItem>.Release(list);
+            ListPool<UserFrameInput>.Release(list);
             _allMessage.Remove(frame);
         }
     }
     
-    public void AddLocalFrame(int frame, MessageItem item)
+    public void AddLocalFrame(int frame, UserFrameInput item)
     {
-        var list = ListPool<MessageItem>.Get();
+        var list = ListPool<UserFrameInput>.Get();
         list.Add(item);
         _allMessage.Add(frame, list);
     }

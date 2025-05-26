@@ -23,7 +23,7 @@ public partial class ControllerUserSystem : SystemBase
         var moveSpeedComponet = EntityManager.GetComponentData<UserMoveSpeedComponet>(entity);
         gameObjectrComponent.gameObject.transform.position = gameObjectrComponent.gameObject.transform.position += UnityEngine.Time.deltaTime * moveSpeedComponet.speed * dir;
 
-        LocalFrame.inputCache.AddMsg(new PositionInputStruct
+        LocalFrame.inputCache.AddMsg(new UserPositionInput
         {
             x = (fp)gameObjectrComponent.gameObject.transform.position.x,
             z = (fp)gameObjectrComponent.gameObject.transform.position.z,
