@@ -59,7 +59,7 @@ public class BattleLogic
         AddUser();
         _world.EntityManager.CreateSingleton(new ComFrameCount());
         _world.EntityManager.CreateSingleton(new ComGameState());
-        _world.EntityManager.CreateSingleton(new ComRandom { random = new fpRandom(battleStartMessage.seed) });
+        _world.EntityManager.CreateSingleton(new ComRandomValue { random = new fpRandom(battleStartMessage.seed) });
 
         // Add Controller 
         BattleControllerMgr.Instance.AddController(new BattleDataController(battleStartMessage));
@@ -107,9 +107,11 @@ public class BattleLogic
         // For example, you might want to create entities or set up components
         // Example: Create a new entity and add components to it
         EntityManager entityManager = _world.EntityManager;
-        EntityArchetype archetype = entityManager.CreateArchetype(typeof(LTransform), typeof(GameobjectrComponent), typeof(UserMoveSpeedComponet));
+        EntityArchetype archetype = entityManager.CreateArchetype(typeof(LComPosition), typeof(LComRotation), typeof(LComHp),  typeof(GameobjectrComponent), typeof(UserMoveSpeedComponet));
         Entity entity = entityManager.CreateEntity(archetype);
-        entityManager.SetComponentData(entity, new LTransform { position = new fp3(0, 0, 0) });
+        entityManager.SetComponentData(entity, new LComPosition { Value = new fp3(0, 0, 0) });
+        entityManager.SetComponentData(entity, new LComRotation { Value = fpQuaternion.identity });
+        entityManager.SetComponentData(entity, new LComHp { Value = 100 });
         entityManager.SetComponentData(entity, new UserMoveSpeedComponet { speed = 8 });
         entityManager.SetComponentData(entity, new GameobjectrComponent { gameObject = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube) });
     }

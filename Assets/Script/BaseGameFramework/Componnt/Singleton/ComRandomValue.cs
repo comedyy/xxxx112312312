@@ -1,7 +1,7 @@
 using Deterministics.Math;
 using Unity.Entities;
 
-public struct ComRandom : IComponentData
+public struct ComRandomValue : IComponentData
 {
     public fpRandom random;
 }

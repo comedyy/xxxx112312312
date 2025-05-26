@@ -13,7 +13,7 @@ public partial class VLerpTransformSystem : SystemBase
         var deltaTime = UnityEngine.Time.deltaTime;
         var timeInterval = ComFrameCount.DELTA_TIME;
 
-        Entities.ForEach((ref LTransform lTransform, ref VLerpTransform vLerp, ref VTransform vTransform) =>
+        Entities.ForEach((ref LComPosition lPostion, ref LComRotation lRotation, ref VLerpTransform vLerp, ref VTransform vTransform) =>
         {
             vLerp.lerpTime += deltaTime;
             var percent = math.clamp(vLerp.lerpTime / timeInterval, 0, 1);
@@ -23,7 +23,7 @@ public partial class VLerpTransformSystem : SystemBase
             if (isLogicFrame)
             {
                 vLerp.pre = vTransform;
-                vLerp.target = new VTransform() { position = lTransform.position, quaternion = lTransform.quaternion };
+                vLerp.target = new VTransform() { position = lPostion.Value, quaternion = lRotation.Value };
                 vLerp.lerpTime = 0;
             }
         }).Run();

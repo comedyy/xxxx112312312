@@ -14,13 +14,13 @@ public partial class RvoSyncPositionFromRvoSystem : SystemBase
         base.OnCreate();
         // Initialize the system here if needed
 
-        _entityQuery = GetEntityQuery(ComponentType.ReadOnly<RvoComponent>(), ComponentType.ReadOnly<LTransform>());
+        _entityQuery = GetEntityQuery(ComponentType.ReadOnly<RvoComponent>(), ComponentType.ReadOnly<LComPosition>());
     }
 
     protected override void OnUpdate()
     {
         GetPositionFromRvoJob job = new GetPositionFromRvoJob(){
-            TranslationChunkType = GetComponentTypeHandle<LTransform>(),
+            TranslationChunkType = GetComponentTypeHandle<LComPosition>(),
             AgentChunkType = GetComponentTypeHandle<RvoComponent>(),
             Min = default, Max = default, ignoreRVOSize = default
         };
@@ -31,7 +31,7 @@ public partial class RvoSyncPositionFromRvoSystem : SystemBase
     [BurstCompile]
     struct GetPositionFromRvoJob : IJobChunk
     {
-        public ComponentTypeHandle<LTransform> TranslationChunkType;
+        public ComponentTypeHandle<LComPosition> TranslationChunkType;
         public ComponentTypeHandle<RvoComponent> AgentChunkType;
         [ReadOnly] public fp2 Min;
         [ReadOnly] public fp2 Max;
@@ -49,16 +49,9 @@ public partial class RvoSyncPositionFromRvoSystem : SystemBase
 
                 AgentVector2 agentPos1 = MSPathSystem.GetAgentPositionCS(nowAgent.AgentType, nowAgent.AgentId);
                 var pos = new fp3(agentPos1.x, 0, agentPos1.y);
-                nowTranslation.position = pos;
+                nowTranslation.Value = pos;
 
                 translationArray[i] = nowTranslation;
-
-                // if(!ignoreRVOSize)
-                // {
-                //     var inside = DropRange.ContainsVector3(pos, Min, Max);
-                //     int neighborCount = inside ? nowAgent.RvoNeighborCount : 1;
-                //     MSPathSystem.setAgentMaxNeighbors(nowAgent.AgentType, nowAgent.AgentIndex, neighborCount);
-                // }
             }
         }
     }
