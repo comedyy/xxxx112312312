@@ -1,14 +1,15 @@
 using System;
 using System.Collections.Generic;
 
-public class ReplayBattleControl : ILocalFrame
+public class PlaybackBattleControl : ILocalFrame
 {
     LocalFrame _localFrame;
     float totalTime;
     float preFrameSeconds;
 
     public PlaybackReader _reader;
-    public ReplayBattleControl(LocalFrame localFrame, PlaybackReader playbackReader)
+    public int PlaybackScale { get; set; } = 1; // 播放速度
+    public PlaybackBattleControl(LocalFrame localFrame, PlaybackReader playbackReader)
     {
         _localFrame = localFrame;
         _reader = playbackReader;
@@ -34,7 +35,10 @@ public class ReplayBattleControl : ILocalFrame
 
         preFrameSeconds += ComFrameCount.DELTA_TIME;
 
-        AddLocalFrame();
+        for (int i = 0; i < PlaybackScale; i++)
+        {
+            AddLocalFrame();
+        }
     }
 
     private void AddLocalFrame()

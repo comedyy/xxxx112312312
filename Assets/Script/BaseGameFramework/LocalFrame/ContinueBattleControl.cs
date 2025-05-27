@@ -9,6 +9,7 @@ public class ContinueBattleControl : ILocalFrame
     public PlaybackReader _reader;
     InputCache _inputCache;
     bool _isInReplayMode = false;
+    public int PlaybackScale { get; private set; } = 1; // 播放速度
 
     public ContinueBattleControl(LocalFrame localFrame, InputCache inputCache, PlaybackReader playbackReader)
     {
@@ -17,6 +18,7 @@ public class ContinueBattleControl : ILocalFrame
         _inputCache = inputCache;
         _inputCache.CanInput = false;
         _isInReplayMode = true;
+        PlaybackScale = 10;
     }
 
     public void Dispose()
@@ -36,7 +38,10 @@ public class ContinueBattleControl : ILocalFrame
 
         preFrameSeconds += ComFrameCount.DELTA_TIME;
 
-        AddLocalFrame();
+        for (int i = 0; i < PlaybackScale; i++)
+        {
+            AddLocalFrame();
+        }
     }
 
     private void UpdateReplayState()
@@ -47,6 +52,7 @@ public class ContinueBattleControl : ILocalFrame
         {
             _isInReplayMode = false;
             _inputCache.CanInput = true;
+            PlaybackScale = 1;
             return;
         }
     }
@@ -65,6 +71,11 @@ public class ContinueBattleControl : ILocalFrame
         }
         else
         {
+            if (_reader.AllEnd || _reader.IsUnSync)
+            {
+                return;
+            }
+
             var list = ListPool<UserFrameInput>.Get();
             _reader.GetMessageItem(_localFrame.ReceivedServerFrame, list);
             foreach (var item in list)

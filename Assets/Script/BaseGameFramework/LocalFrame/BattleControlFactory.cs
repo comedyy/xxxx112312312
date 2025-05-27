@@ -13,7 +13,7 @@ public class BattleControlFactory
         else if (battleType == BattleType.Replay)
         {
             var playbackReader = BattleControllerMgr.Instance.GetController<PlaybackController>().Reader;
-            return new ReplayBattleControl(localFrame, playbackReader);
+            return new PlaybackBattleControl(localFrame, playbackReader);
         }
         else if (battleType == BattleType.ContinueBattle)
         {
