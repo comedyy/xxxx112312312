@@ -45,7 +45,6 @@ public class BattleRecordSaver
         {
             item.playbackBit |= PlaybackBit.Hash;
             item.hash = new MessageHash() { hash = checkSumMgr.GetResultHash() };
-            UnityEngine.Debug.Log($"[BattleRecordSaver] frame:{frame} hash:{item.hash.hash}");
         }
         
         if(forceSave)

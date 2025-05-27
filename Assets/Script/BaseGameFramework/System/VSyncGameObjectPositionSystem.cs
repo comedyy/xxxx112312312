@@ -4,7 +4,7 @@ public partial class VSyncGameObjectPositionSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        if (LocalFrame.Instance._inputCache != null)
+        if (LocalFrame.Instance.CanInput)
         {
             return;
         }

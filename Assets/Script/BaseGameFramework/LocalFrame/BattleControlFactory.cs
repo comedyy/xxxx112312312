@@ -15,6 +15,12 @@ public class BattleControlFactory
             var playbackReader = BattleControllerMgr.Instance.GetController<PlaybackController>().Reader;
             return new ReplayBattleControl(localFrame, playbackReader);
         }
+        else if (battleType == BattleType.ContinueBattle)
+        {
+            inputCache = new InputCache(0);
+            var playbackReader = BattleControllerMgr.Instance.GetController<PlaybackController>().Reader;
+            return new ContinueBattleControl(localFrame, inputCache, playbackReader);
+        }
         else
         {
             throw new ArgumentException($"Unsupported BattleType: {battleType}");

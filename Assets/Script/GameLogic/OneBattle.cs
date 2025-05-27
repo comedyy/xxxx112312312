@@ -22,6 +22,10 @@ public class OneBattle
         {
             _battleLogic.StartBattle(new BattleStartMessage() { seed = 12345678, guid = Guid.NewGuid().ToString() }, BattleType.Client);
         }
+        else if (client == BattleType.ContinueBattle)
+        {
+            _battleLogic.StartContinueBattle(GetDefaultPlaybackGUID());
+        }
         else
         {
             _battleLogic.StartReplay(GetDefaultPlaybackGUIDZip());
@@ -49,11 +53,30 @@ public class OneBattle
     {
         DirectoryInfo d = new DirectoryInfo(PlaybackController.PlaybackPath);
 
+        if (!d.Exists) return "";
+
+        List<FileInfo> files = d.GetFiles().ToList();
+
+        files.RemoveAll(m => !m.Name.EndsWith(PlaybackWriter.CompressFormat));
+
+        if (files.Count == 0) return "";
+
+        files.Sort((m, n) => { return n.CreationTime.CompareTo(m.CreationTime); });
+
+        var guid = files[0].Name.Replace("wsa_playback_", "").Replace(PlaybackWriter.CompressFormat, "");
+        return guid;
+    }
+    
+    
+    private static string GetDefaultPlaybackGUID()
+    {
+        DirectoryInfo d = new DirectoryInfo(PlaybackController.PlaybackPath);
+        
         if(!d.Exists) return "";
 
         List<FileInfo> files = d.GetFiles().ToList(); 
-
-        files.RemoveAll(m=>!m.Name.EndsWith(PlaybackWriter.CompressFormat));
+        files.RemoveAll(m=>m.Name.EndsWith(PlaybackWriter.CompressFormat));
+        files.RemoveAll(m=>m.Name.EndsWith("_symbol"));
 
         if(files.Count == 0) return "";
 

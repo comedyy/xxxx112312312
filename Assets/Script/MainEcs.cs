@@ -22,13 +22,17 @@ public class MainEcs : MonoBehaviour
 
     private void OnGUI()
     {
-        if (GUI.Button(new Rect(10, 10, 100, 30), "Start Battle"))
+        if (GUI.Button(new Rect(10, 10, 200, 100), "Start Battle"))
         {
             StartBattle(BattleType.Client);
         }
-        if(GUI.Button(new Rect(10, 50, 100, 30), "Replay Battle"))
+        if (GUI.Button(new Rect(10, 150, 200, 100), "Replay Battle"))
         {
             StartBattle(BattleType.Replay);
+        }
+        if(GUI.Button(new Rect(10, 250, 200, 100), "Continue Battle"))
+        {
+            StartBattle(BattleType.ContinueBattle);
         }
     }
 

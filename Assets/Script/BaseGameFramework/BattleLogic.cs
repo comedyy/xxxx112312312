@@ -16,6 +16,13 @@ public class BattleLogic
         _world.Dispose();
     }
 
+
+    public void StartContinueBattle(string guid)
+    {
+        PlaybackController playbackController = new PlaybackController(guid, PlaybackMode.ReadPlayOnGoing | PlaybackMode.Write);
+        Start(playbackController.Reader.GetBattleStartMessage(), BattleType.ContinueBattle, playbackController);
+    }
+
     public void StartReplay(string guid)
     {
         PlaybackController playbackController = new PlaybackController(guid, PlaybackMode.ReadPlaybackZip);

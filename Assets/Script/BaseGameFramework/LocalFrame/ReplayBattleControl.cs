@@ -7,7 +7,6 @@ public class ReplayBattleControl : ILocalFrame
     float totalTime;
     float preFrameSeconds;
 
-
     public PlaybackReader _reader;
     public ReplayBattleControl(LocalFrame localFrame, PlaybackReader playbackReader)
     {

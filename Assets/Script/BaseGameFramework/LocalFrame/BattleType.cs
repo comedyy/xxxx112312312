@@ -1,5 +1,6 @@
 public enum BattleType
 {
-    Client,     
+    Client,
     Replay,
+    ContinueBattle,
 }

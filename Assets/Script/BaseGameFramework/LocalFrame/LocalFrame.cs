@@ -12,6 +12,7 @@ public class LocalFrame : ILocalFrame
     SyncFrameCache _syncFrameCache = new SyncFrameCache();
 
     public InputCache _inputCache;
+    public bool CanInput => _inputCache != null && _inputCache.CanInput;
 
     public LocalFrame(int id, BattleType battleType)
     {
