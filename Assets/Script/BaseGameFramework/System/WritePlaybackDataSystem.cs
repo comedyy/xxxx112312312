@@ -52,6 +52,7 @@ public partial class WritePlaybackDataSystem : SystemBase
             item.frame = (ushort)frameCount;
             _playbackWriter.SaveFrame(item);
         }
+        _playbackWriter.SetFrame(frameCount);
         
         _playbackWriter.OnUpdate(true, _forceSaveThisFrame);
         _forceSaveThisFrame = false;

@@ -4,9 +4,9 @@ public partial class TimeoutFinishGameSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        if(SystemAPI.TryGetSingleton<ComFrameCount>(out var frameCount))
+        if (SystemAPI.TryGetSingleton<ComFrameCount>(out var frameCount))
         {
-            if (frameCount.frameLogic > 100)
+            if (frameCount.frameLogic > 200)
             {
                 SystemAPI.GetSingletonRW<ComGameState>().ValueRW.IsEnd = true;
                 UnityEngine.Debug.Log("Game Over");

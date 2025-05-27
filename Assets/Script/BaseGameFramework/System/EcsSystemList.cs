@@ -34,6 +34,9 @@ public class EcsSystemList
                         new EcsSystemNodeDescriptor{ rootType = typeof(PreRvoSystemGroup)},
                         new EcsSystemNodeDescriptor{ rootType = typeof(RvoSystemGroup)},
                         new EcsSystemNodeDescriptor{ rootType = typeof(AfterRvoSystemGroup)},
+
+                        new EcsSystemNodeDescriptor{ rootType = typeof(CalculateHashSystem)},
+                        new EcsSystemNodeDescriptor{ rootType = typeof(CompareHashSystem)},
                         new EcsSystemNodeDescriptor{ rootType = typeof(WritePlaybackDataSystem)},
                     }
                 }

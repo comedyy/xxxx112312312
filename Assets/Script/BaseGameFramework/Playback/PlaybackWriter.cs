@@ -131,7 +131,6 @@ public class PlaybackWriter
         // OptWriteTransform(ref data);
 
         _writer.Put(data);
-        _totalFrame = data.frame;
     }
 
     // private void OptWriteTransform(ref PlaybackMessageItem data)
@@ -322,6 +321,11 @@ public class PlaybackWriter
         }
 
         return true;
+    }
+
+    internal void SetFrame(int frameCount)
+    {
+        _totalFrame = frameCount;
     }
 
     // internal void SetLastFrame(int frame)

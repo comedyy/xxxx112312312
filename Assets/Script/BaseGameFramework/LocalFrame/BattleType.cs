@@ -1,3 +1,5 @@
-public enum BattleType {
+public enum BattleType
+{
     Client,     
+    Replay,
 }

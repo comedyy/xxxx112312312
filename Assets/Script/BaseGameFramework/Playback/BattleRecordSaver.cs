@@ -41,11 +41,12 @@ public class BattleRecordSaver
         //     _stage = _localFrame._clientStageIndex;
         // }
 
-        // if (CalculateHashSystem.NeedCalHash(frame, false, out var _))
-        // {
-        //     item.playbackBit |= PlaybackBit.Hash;
-        //     item.hash = new MessageHash() { hash = checkSumMgr.GetResultHash() }; ;
-        // }
+        if (CalculateHashSystem.NeedCalHash(frame, false, out var _))
+        {
+            item.playbackBit |= PlaybackBit.Hash;
+            item.hash = new MessageHash() { hash = checkSumMgr.GetResultHash() };
+            UnityEngine.Debug.Log($"[BattleRecordSaver] frame:{frame} hash:{item.hash.hash}");
+        }
         
         if(forceSave)
         {

@@ -6,48 +6,14 @@ using System.Linq;
 
 public enum CheckSumType
 {
+    BattleMessageHash,
     beforeGetPositionFromRvo,
     afterGetPositionFromRvo,
     preRvoPosition,
     pos,
-    skillPos,
     hp,
-    createMonster,
-    destroyMonster,
-    createDropEvent,
-    createDrop,
-    dropPos,
-    desroyDrop,
-    createBullet,
-    destroyBullet,
-    monsterDamage,
     randomValue,
-    createSkill,
-    outofScreen,
-    screenAreaCheckSum,
-    eventChecksum,
-    triggerSkillChecksum,
-    createSkillDamage,
-    RVOOptCheckSum,
-    RoomState,
-    DropReward,
     Input,
-    AiBot,
-    dropState,
-    heroSkillChecksum,
-    SkillDamageAttrib,
-    finalValueCheckSUm,
-    HeroAttribChangeSum,
-    timeoutCallback,
-    behaviorTree,
-    MonsterAttribChangeSum,
-    heroInitAttribute,
-    heroAttributeCall,
-    heroInitNetAttribute,
-    attribChangeSum,
-    inputAttribute,
-    battleAttribute,
-    battleAttributeChange,
     Count,
 }
 
@@ -91,11 +57,11 @@ public class CheckSum
     int m_Frame;
     public int m_HashCode;
 
-    #if DEBUG_1
+#if DEBUG_1
     CheckSumHistory _current;
 
     public List<CheckSumHistory> _lstHistory = new List<CheckSumHistory>();
-    #endif
+#endif
 
 
     [MethodImpl(MethodImplOptions.AggressiveInlining)]

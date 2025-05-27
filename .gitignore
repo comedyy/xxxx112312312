@@ -2,6 +2,8 @@
 Library/
 obj/
 Temp/
+Logs/
+playback/
 *.apk
 *.sln
 *.csproj

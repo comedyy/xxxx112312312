@@ -23,11 +23,8 @@ public class LocalFrame : ILocalFrame
 
     public LocalFrame(int id, BattleType battleType)
     {
-        if (battleType == BattleType.Client)
-        {
-            _localFrameInstance = new LocalFrameClientInsance(this);
-        }
-
+        _localFrameInstance = BattleControlFactory.Create(battleType, this);
+        
         _inputCache = new InputCache(id);
         Instance = this;
     }

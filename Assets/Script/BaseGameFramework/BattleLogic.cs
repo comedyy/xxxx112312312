@@ -7,50 +7,41 @@ public class BattleLogic
 {
     World _world;
 
+    public BattleLogic()
+    {
+    }
+
     public void Dispose()
     {
         _world.Dispose();
     }
 
-    public void Initialize(BattleStartMessage battleStartMessage)
+    public void StartReplay(string guid)
     {
+        PlaybackController playbackController = new PlaybackController(guid, PlaybackMode.ReadPlaybackZip);
+        Start(playbackController.Reader.GetBattleStartMessage(), BattleType.Replay, playbackController);
+    }
+
+    public void StartBattle(BattleStartMessage battleStartMessage, BattleType battleType)
+    {
+        Start(battleStartMessage, battleType, new PlaybackController(battleStartMessage.guid, PlaybackMode.Write));
+    }
+
+    public void Start(BattleStartMessage battleStartMessage, BattleType battleType, PlaybackController playbackController)
+    {
+        // Add Controller 
+        BattleControllerMgr.Instance.AddController(new BattleDataController(battleStartMessage));
+        BattleControllerMgr.Instance.AddController(playbackController);
+        BattleControllerMgr.Instance.AddController(new CheckSumMgr());
+        
         // Initialize the battle logic here
         _world = new World("battleWorld");
 
-        LocalFrame localFrame = new LocalFrame(0, BattleType.Client);
+        LocalFrame localFrame = new LocalFrame(0, battleType);
 
         var systemGroup = _world.GetOrCreateSystemManaged<BattleRootSystemGroup>();
         CreateSystemByList(_world, systemGroup, EcsSystemList.nodeDescriptorList);
         InjectSystem(localFrame);
-
-        // // init
-        // InitializationSystemGroup initializationSystemGroup = _world.GetOrCreateSystemManaged<InitializationSystemGroup>();
-        // initializationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<ControllerUserSystem>());
-        // initializationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<UpdateLocalFrameSystem>());
-
-        // // simulation
-        // SimulationSystemGroup simulationSystemGroup = _world.GetOrCreateSystemManaged<SimulationSystemGroup>();
-        // var logicSystemGroup = _world.CreateSystemManaged<LogicUpdateSystemGroup>();
-        // simulationSystemGroup.AddSystemToUpdateList(logicSystemGroup);
-        // logicSystemGroup.Inject(localFrame);
-
-        // var inputSystem = _world.CreateSystemManaged<InputUserSystem>();
-        // inputSystem.fetchFrame = localFrame.syncFrameInputCache;
-        // logicSystemGroup.AddSystemToUpdateList(inputSystem);
-
-        // logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<PreRvoSystemGroup>());
-        // logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<RvoSystemGroup>());
-        // logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<AfterRvoSystemGroup>());
-
-        // // logicSystemGroup.AddSystemToUpdateList(_world.CreateSystem<WritePlaybackDataSystem>());
-
-        // // presentation
-        // PresentationSystemGroup presentationSystemGroup = _world.GetOrCreateSystemManaged<PresentationSystemGroup>();
-        // var unsortedPresentationSystemGroup = _world.CreateSystemManaged<UnsortedPresentationSystemGroup>();
-        // presentationSystemGroup.AddSystemToUpdateList(unsortedPresentationSystemGroup);
-
-        // unsortedPresentationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<VLerpTransformSystem>());
-        // unsortedPresentationSystemGroup.AddSystemToUpdateList(_world.CreateSystem<DrawEntitySystem>());
 
         World.DefaultGameObjectInjectionWorld = _world;
         ScriptBehaviourUpdateOrder.AppendWorldToCurrentPlayerLoop(_world);
@@ -60,11 +51,6 @@ public class BattleLogic
         _world.EntityManager.CreateSingleton(new ComFrameCount());
         _world.EntityManager.CreateSingleton(new ComGameState());
         _world.EntityManager.CreateSingleton(new ComRandomValue { random = new fpRandom(battleStartMessage.seed) });
-
-        // Add Controller 
-        BattleControllerMgr.Instance.AddController(new BattleDataController(battleStartMessage));
-        BattleControllerMgr.Instance.AddController(new PlaybackController(battleStartMessage.guid, PlaybackMode.Write));
-        BattleControllerMgr.Instance.AddController(new CheckSumMgr());
     }
 
     private void InjectSystem(LocalFrame localFrame)

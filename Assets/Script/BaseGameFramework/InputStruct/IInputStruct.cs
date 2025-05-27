@@ -1,8 +1,7 @@
 using LiteNetLib.Utils;
 
-public interface IInputStruct : INetSerializable
+public interface IInputStruct : INetSerializable, IGetCheckSum
 {
     bool isSingtonInput { get; }
     int structType { get; }
-    int GetCheckSum();
 }

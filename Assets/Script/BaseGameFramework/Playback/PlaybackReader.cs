@@ -236,15 +236,16 @@ public class PlaybackReader
 
         if(_dicHash.TryGetValue(frame, out var innerMessage))
         {
-            if(checkMessage.hash != innerMessage.hash)
+            Debug.LogError(checkMessage.hash);
+            if (checkMessage.hash != innerMessage.hash)
             {
-                var context = $"回放hash不同，第{frame}帧 【{checkMessage.hash}】【{innerMessage.hash}】 + batleID:【{_battleId}】" ;
+                var context = $"回放hash不同，第{frame}帧 【{checkMessage.hash}】【{innerMessage.hash}】 + batleID:【{_battleId}】";
                 Debug.LogError(context);
 
-                #if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
                 context = DateTime.Now + " "+ context;
                 File.AppendAllText(MainTestUnLimited.GetAppPath() + "ChallengeSyncLog.log", context + "\n");
-                #endif
+#endif
 
                 IsUnSync = true;
 
@@ -331,4 +332,5 @@ public class PlaybackReader
 
         return list;
     }
+
 }

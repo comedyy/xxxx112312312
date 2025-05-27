@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 
-public class LocalFrameClientInsance : ILocalFrame
+public class ClientBattleControl : ILocalFrame
 {
     LocalFrame _localFrame;
     float totalTime;
     float preFrameSeconds;
-    public LocalFrameClientInsance(LocalFrame localFrame)
+    public ClientBattleControl(LocalFrame localFrame)
     {
         _localFrame = localFrame;
     }
