@@ -4,6 +4,18 @@ public partial class VSyncGameObjectPositionSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        throw new System.NotImplementedException();
+        if (LocalFrame.Instance._inputCache != null)
+        {
+            return;
+        }
+
+        Entities.WithoutBurst().ForEach((GameobjectrComponent gameObjectrComponent, ref VTransform vTransform) =>
+        {
+            if (gameObjectrComponent.gameObject != null)
+            {
+                gameObjectrComponent.gameObject.transform.position = vTransform.position;
+                gameObjectrComponent.gameObject.transform.rotation = vTransform.quaternion;
+            }
+        }).Run();
     }
 }

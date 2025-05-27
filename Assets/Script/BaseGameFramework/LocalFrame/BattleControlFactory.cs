@@ -2,11 +2,13 @@ using System;
 
 public class BattleControlFactory
 {
-    internal static ILocalFrame Create(BattleType battleType, LocalFrame localFrame)
+    internal static ILocalFrame Create(BattleType battleType, LocalFrame localFrame, out InputCache inputCache)
     {
+        inputCache = null;
         if (battleType == BattleType.Client)
         {
-            return new ClientBattleControl(localFrame);
+            inputCache = new InputCache(0);
+            return new ClientBattleControl(localFrame, inputCache);
         }
         else if (battleType == BattleType.Replay)
         {

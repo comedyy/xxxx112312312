@@ -53,6 +53,7 @@ public class EcsSystemList
                     list = new List<EcsSystemNodeDescriptor>
                     {
                         new EcsSystemNodeDescriptor{ rootType = typeof(VLerpTransformSystem)},
+                        new EcsSystemNodeDescriptor{ rootType = typeof(VSyncGameObjectPositionSystem)},
                         new EcsSystemNodeDescriptor{ rootType = typeof(DrawEntitySystem)}
                     }
                 }

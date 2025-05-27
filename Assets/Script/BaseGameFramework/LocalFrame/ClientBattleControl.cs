@@ -6,9 +6,12 @@ public class ClientBattleControl : ILocalFrame
     LocalFrame _localFrame;
     float totalTime;
     float preFrameSeconds;
-    public ClientBattleControl(LocalFrame localFrame)
+
+    InputCache _inputCache;
+    public ClientBattleControl(LocalFrame localFrame, InputCache inputCache)
     {
         _localFrame = localFrame;
+        _inputCache = inputCache;
     }
 
     public void Dispose()
@@ -33,7 +36,7 @@ public class ClientBattleControl : ILocalFrame
     {
         _localFrame.ReceivedServerFrame++;
 
-        var ok = _localFrame._inputCache.FetchItem(out var item);
+        var ok = _inputCache.FetchItem(out var item);
         if (ok)
         {
             _localFrame.syncFrameInputCache.AddLocalFrame(_localFrame.ReceivedServerFrame, item);

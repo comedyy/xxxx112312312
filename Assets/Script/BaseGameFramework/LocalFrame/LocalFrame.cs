@@ -12,20 +12,10 @@ public class LocalFrame : ILocalFrame
     SyncFrameCache _syncFrameCache = new SyncFrameCache();
 
     public InputCache _inputCache;
-    public static InputCache inputCache
-    {
-        get
-        {
-            return Instance._inputCache;
-        }
-    }
-    
 
     public LocalFrame(int id, BattleType battleType)
     {
-        _localFrameInstance = BattleControlFactory.Create(battleType, this);
-        
-        _inputCache = new InputCache(id);
+        _localFrameInstance = BattleControlFactory.Create(battleType, this, out _inputCache);
         Instance = this;
     }
 

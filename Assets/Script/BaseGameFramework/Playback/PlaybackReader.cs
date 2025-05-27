@@ -236,7 +236,6 @@ public class PlaybackReader
 
         if(_dicHash.TryGetValue(frame, out var innerMessage))
         {
-            Debug.LogError(checkMessage.hash);
             if (checkMessage.hash != innerMessage.hash)
             {
                 var context = $"回放hash不同，第{frame}帧 【{checkMessage.hash}】【{innerMessage.hash}】 + batleID:【{_battleId}】";

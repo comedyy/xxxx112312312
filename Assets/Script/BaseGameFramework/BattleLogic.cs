@@ -93,7 +93,7 @@ public class BattleLogic
         // For example, you might want to create entities or set up components
         // Example: Create a new entity and add components to it
         EntityManager entityManager = _world.EntityManager;
-        EntityArchetype archetype = entityManager.CreateArchetype(typeof(LComPosition), typeof(LComRotation), typeof(LComHp),  typeof(GameobjectrComponent), typeof(UserMoveSpeedComponet));
+        EntityArchetype archetype = entityManager.CreateArchetype(typeof(LComPosition), typeof(LComRotation), typeof(LComHp),  typeof(GameobjectrComponent), typeof(UserMoveSpeedComponet), typeof(VTransform), typeof(VLerpTransform));
         Entity entity = entityManager.CreateEntity(archetype);
         entityManager.SetComponentData(entity, new LComPosition { Value = new fp3(0, 0, 0) });
         entityManager.SetComponentData(entity, new LComRotation { Value = fpQuaternion.identity });
