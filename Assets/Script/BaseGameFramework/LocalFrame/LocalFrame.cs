@@ -1,11 +1,11 @@
 using System;
 using System.Collections.Generic;
 
-public class LocalFrame : ILocalFrame
+public class LocalFrame
 {
     public static LocalFrame Instance { get; private set; }
     public int GameFrame;
-    public int ReceivedServerFrame;
+    public int ReceivedServerFrame => _syncFrameCache.ReceivedServerFrame;
     ILocalFrame _localFrameInstance;
 
     public IFetchFrame syncFrameInputCache => _syncFrameCache;
@@ -14,9 +14,9 @@ public class LocalFrame : ILocalFrame
     public InputCache _inputCache;
     public bool CanInput => _inputCache != null && _inputCache.CanInput;
 
-    public LocalFrame(int id, BattleType battleType)
+    public LocalFrame(BattleType battleType)
     {
-        _localFrameInstance = BattleControlFactory.Create(battleType, this, out _inputCache);
+        _localFrameInstance = BattleControlFactory.Create(battleType, _syncFrameCache, out _inputCache);
         Instance = this;
     }
 
@@ -28,5 +28,10 @@ public class LocalFrame : ILocalFrame
     public void Dispose()
     {
         _localFrameInstance.Dispose();
+    }
+
+    internal void SetBattleEnd()
+    {
+        _localFrameInstance.SetBattleEnd();
     }
 }

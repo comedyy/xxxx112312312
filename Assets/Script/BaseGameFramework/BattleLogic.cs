@@ -33,6 +33,11 @@ public class BattleLogic
     {
         Start(battleStartMessage, battleType, new PlaybackController(battleStartMessage.guid, PlaybackMode.Write));
     }
+    
+    public void StartOnlineBattle(BattleStartMessage battleStartMessage)
+    {
+        Start(battleStartMessage, BattleType.OnlineBattle, new PlaybackController(battleStartMessage.guid, PlaybackMode.Write));
+    }
 
     public void Start(BattleStartMessage battleStartMessage, BattleType battleType, PlaybackController playbackController)
     {
@@ -40,11 +45,11 @@ public class BattleLogic
         BattleControllerMgr.Instance.AddController(new BattleDataController(battleStartMessage));
         BattleControllerMgr.Instance.AddController(playbackController);
         BattleControllerMgr.Instance.AddController(new CheckSumMgr());
-        
+
         // Initialize the battle logic here
         _world = new World("battleWorld");
 
-        LocalFrame localFrame = new LocalFrame(0, battleType);
+        LocalFrame localFrame = new LocalFrame(battleType);
 
         var systemGroup = _world.GetOrCreateSystemManaged<BattleRootSystemGroup>();
         CreateSystemByList(_world, systemGroup, EcsSystemList.nodeDescriptorList);
@@ -108,4 +113,5 @@ public class BattleLogic
         entityManager.SetComponentData(entity, new UserMoveSpeedComponet { speed = 8 });
         entityManager.SetComponentData(entity, new GameobjectrComponent { gameObject = UnityEngine.GameObject.CreatePrimitive(UnityEngine.PrimitiveType.Cube) });
     }
+
 }

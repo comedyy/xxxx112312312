@@ -3,14 +3,14 @@ using System.Collections.Generic;
 
 public class ClientBattleControl : ILocalFrame
 {
-    LocalFrame _localFrame;
     float totalTime;
     float preFrameSeconds;
 
     InputCache _inputCache;
-    public ClientBattleControl(LocalFrame localFrame, InputCache inputCache)
+    private readonly IPutMessage _putMessage;
+    public ClientBattleControl(InputCache inputCache, IPutMessage putMessage)
     {
-        _localFrame = localFrame;
+        _putMessage = putMessage;
         _inputCache = inputCache;
     }
 
@@ -34,12 +34,13 @@ public class ClientBattleControl : ILocalFrame
 
     private void AddLocalFrame()
     {
-        _localFrame.ReceivedServerFrame++;
+        var targetFrame = _putMessage.ReceivedServerFrame + 1;
 
-        var ok = _inputCache.FetchItem(out var item);
-        if (ok)
-        {
-            _localFrame.syncFrameInputCache.AddLocalFrame(_localFrame.ReceivedServerFrame, item);
-        }
+        var item = _inputCache.FetchItem();
+        _putMessage.AddLocalFrame(targetFrame, item);
+    }
+
+    public void SetBattleEnd()
+    {
     }
 }

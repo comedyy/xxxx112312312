@@ -12,7 +12,7 @@ public class OneBattle
     public OneBattle()
     {
     }
-    public void Initialize(BattleType client)
+    public void Initialize(BattleType client, BattleStartMessage battleStartMessage)
     {
         // Initialize the battle logic here
         Debug.Log("Battle Initialized");
@@ -25,6 +25,10 @@ public class OneBattle
         else if (client == BattleType.ContinueBattle)
         {
             _battleLogic.StartContinueBattle(GetDefaultPlaybackGUID());
+        }
+        else if(client == BattleType.OnlineBattle)
+        {
+            _battleLogic.StartOnlineBattle(battleStartMessage);
         }
         else
         {

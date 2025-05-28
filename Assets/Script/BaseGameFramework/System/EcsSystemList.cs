@@ -23,7 +23,7 @@ public class EcsSystemList
         },
         new EcsSystemNodeDescriptor
         {
-            rootType = typeof(InitializationSystemGroup),
+            rootType = typeof(SimulationSystemGroup),
             list = new List<EcsSystemNodeDescriptor>
             {
                 new EcsSystemNodeDescriptor{

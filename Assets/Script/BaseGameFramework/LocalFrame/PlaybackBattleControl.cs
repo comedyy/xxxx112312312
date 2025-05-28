@@ -3,16 +3,17 @@ using System.Collections.Generic;
 
 public class PlaybackBattleControl : ILocalFrame
 {
-    LocalFrame _localFrame;
     float totalTime;
     float preFrameSeconds;
 
     public PlaybackReader _reader;
+    private readonly IPutMessage _putMessage;
+
     public int PlaybackScale { get; set; } = 1; // 播放速度
-    public PlaybackBattleControl(LocalFrame localFrame, PlaybackReader playbackReader)
+    public PlaybackBattleControl(PlaybackReader playbackReader, IPutMessage putMessage)
     {
-        _localFrame = localFrame;
         _reader = playbackReader;
+        this._putMessage = putMessage;
     }
 
     public void Dispose()
@@ -43,17 +44,15 @@ public class PlaybackBattleControl : ILocalFrame
 
     private void AddLocalFrame()
     {
-        _localFrame.ReceivedServerFrame++;
+        var targetFrame = _putMessage.ReceivedServerFrame + 1;
 
         var list = ListPool<UserFrameInput>.Get();
 
-        _reader.GetMessageItem(_localFrame.ReceivedServerFrame, list);
-        // var ok = _localFrame._inputCache.FetchItem(out var item);
-        foreach (var item in list)
-        {
-            _localFrame.syncFrameInputCache.AddLocalFrame(_localFrame.ReceivedServerFrame, item);
-        }
+        _reader.GetMessageItem(targetFrame, list);
+        _putMessage.AddFrameWithList(targetFrame, list);
+    }
 
-        ListPool<UserFrameInput>.Release(list);
+    public void SetBattleEnd()
+    {
     }
 }

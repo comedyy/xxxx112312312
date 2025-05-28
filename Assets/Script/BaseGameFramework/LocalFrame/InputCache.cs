@@ -38,19 +38,19 @@ public class InputCache
         _inputStructs.Add(x);
     }
 
-    public bool FetchItem(out UserFrameInput messageItem)
+    public UserFrameInput? FetchItem()
     {
-        if(_inputStructs.Count == 0)
+        if (_inputStructs.Count == 0)
         {
-            messageItem = default;
-            return false;
+            return null;
         }
-        messageItem = new UserFrameInput
+
+        var messageItem = new UserFrameInput
         {
             inputList = _inputStructs,
             id = _controllerId,
         };
 
-        return true;
+        return messageItem;
     }
 }

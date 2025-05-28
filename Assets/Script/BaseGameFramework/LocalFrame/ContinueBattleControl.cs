@@ -3,22 +3,22 @@ using System.Collections.Generic;
 
 public class ContinueBattleControl : ILocalFrame
 {
-    LocalFrame _localFrame;
     float totalTime;
     float preFrameSeconds;
     public PlaybackReader _reader;
     InputCache _inputCache;
     bool _isInReplayMode = false;
     public int PlaybackScale { get; private set; } = 1; // 播放速度
+    public IPutMessage _putMessage;
 
-    public ContinueBattleControl(LocalFrame localFrame, InputCache inputCache, PlaybackReader playbackReader)
+    public ContinueBattleControl(InputCache inputCache, PlaybackReader playbackReader, IPutMessage putMessage)
     {
-        _localFrame = localFrame;
         _reader = playbackReader;
         _inputCache = inputCache;
         _inputCache.CanInput = false;
         _isInReplayMode = true;
         PlaybackScale = 10;
+        _putMessage = putMessage;
     }
 
     public void Dispose()
@@ -59,15 +59,11 @@ public class ContinueBattleControl : ILocalFrame
 
     private void AddLocalFrame()
     {
-        _localFrame.ReceivedServerFrame++;
-
+        var targetFrame = _putMessage.ReceivedServerFrame + 1;
         if (!_isInReplayMode)
         {
-            var ok = _inputCache.FetchItem(out var item);
-            if (ok)
-            {
-                _localFrame.syncFrameInputCache.AddLocalFrame(_localFrame.ReceivedServerFrame, item);
-            }
+            var item = _inputCache.FetchItem();
+            _putMessage.AddLocalFrame(targetFrame, item);
         }
         else
         {
@@ -77,13 +73,13 @@ public class ContinueBattleControl : ILocalFrame
             }
 
             var list = ListPool<UserFrameInput>.Get();
-            _reader.GetMessageItem(_localFrame.ReceivedServerFrame, list);
-            foreach (var item in list)
-            {
-                _localFrame.syncFrameInputCache.AddLocalFrame(_localFrame.ReceivedServerFrame, item);
-            }
-            ListPool<UserFrameInput>.Release(list);
+            _reader.GetMessageItem(targetFrame, list);
+            _putMessage.AddFrameWithList(targetFrame, list);
         }
         
+    }
+
+    public void SetBattleEnd()
+    {
     }
 }

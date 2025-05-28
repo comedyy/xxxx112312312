@@ -4,7 +4,6 @@ using Unity.Entities;
 public interface IFetchFrame
 {
     void GetAllMessage(int frame, List<UserFrameInput> messageItems);
-    void AddLocalFrame(int frame, UserFrameInput item);
 }
 
 public partial class InputUserSystem : SystemBase

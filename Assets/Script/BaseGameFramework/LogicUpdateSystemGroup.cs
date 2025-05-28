@@ -17,7 +17,11 @@ public partial class LogicUpdateSystemGroup : BaseUnsortSystemGroup
         for(int i = 0; i < needFrame; i++)
         {
             var gameStateCom = SystemAPI.GetSingleton<ComGameState>();
-            if (gameStateCom.IsEnd) break;
+            if (gameStateCom.IsEnd)
+            {
+                _localFrame.SetBattleEnd();
+                break;
+            }
 
             frameCount.frameLogic++;
             frameCount.frameUnity = UnityEngine.Time.frameCount;
