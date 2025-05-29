@@ -28,27 +28,30 @@ public partial class InputUserSystem : SystemBase
                 }
                 else
                 {
-                    ProcessMsg(inputStruct);
+                    ProcessMsg(x.id, inputStruct);
                 }
             }
         }
     }
 
-    private void ProcessMsg(IInputStruct inputStruct)
+    public Entity GetUserEntity(int id)
     {
+        var buffer = SystemAPI.GetSingletonBuffer<BufferUserEntity>();
+        foreach (var x in buffer)
+        {
+            if (x.id == id) return x.entity;
+        }
+        
+        throw new Exception($"GetUserEntity {id}");
+    }
+
+    private void ProcessMsg(int id, IInputStruct inputStruct)
+    {
+        var entity = GetUserEntity(id);
         if (inputStruct is UserPositionInput positionInput)
         {
-            SystemAPI.TryGetSingletonEntity<UserMoveSpeedComponet>(out var entity);
-            if (entity == Entity.Null)
-            {
-                return;
-            }
-
             var x = SystemAPI.GetComponentRW<LComPosition>(entity);
             x.ValueRW.Value = new Deterministics.Math.fp3(positionInput.x, 0, positionInput.z);
-
-            // var gameObjectrComponent = EntityManager.GetComponentObject<GameobjectrComponent>(entity);
-            // gameObjectrComponent.gameObject.transform.position = new UnityEngine.Vector3(positionInput.x, 0, positionInput.z);
         }
     }
 }

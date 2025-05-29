@@ -8,7 +8,7 @@ using UnityEngine;
 
 public class OneBattle
 {
-    BattleLogic _battleLogic;
+    BattleLogicFrameWork _battleLogic;
     public OneBattle()
     {
     }
@@ -17,10 +17,13 @@ public class OneBattle
         // Initialize the battle logic here
         Debug.Log("Battle Initialized");
 
-        _battleLogic = new BattleLogic();
+        _battleLogic = new BattleLogicFrameWork();
         if (client == BattleType.Client)
         {
-            _battleLogic.StartBattle(new BattleStartMessage() { seed = 12345678, guid = Guid.NewGuid().ToString() }, BattleType.Client);
+            _battleLogic.StartSingleClientBattle(new BattleStartMessage() { seed = 12345678, guid = Guid.NewGuid().ToString(), joins = new JoinMessage[]
+            {
+                new JoinMessage(){  UserId = (int)RoomGUI.userId, skills = new int[]{ } }
+            } }, BattleType.Client);
         }
         else if (client == BattleType.ContinueBattle)
         {
@@ -28,7 +31,7 @@ public class OneBattle
         }
         else if(client == BattleType.OnlineBattle)
         {
-            _battleLogic.StartOnlineBattle(battleStartMessage);
+            _battleLogic.StartOnlineBattle(battleStartMessage, (int)RoomGUI.userId);
         }
         else
         {

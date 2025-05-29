@@ -241,10 +241,10 @@ public class PlaybackReader
                 var context = $"回放hash不同，第{frame}帧 【{checkMessage.hash}】【{innerMessage.hash}】 + batleID:【{_battleId}】";
                 Debug.LogError(context);
 
-#if UNITY_STANDALONE_WIN && !UNITY_EDITOR
-                context = DateTime.Now + " "+ context;
-                File.AppendAllText(MainTestUnLimited.GetAppPath() + "ChallengeSyncLog.log", context + "\n");
-#endif
+// #if UNITY_STANDALONE_WIN && !UNITY_EDITOR
+//                 context = DateTime.Now + " "+ context;
+//                 File.AppendAllText(MainTestUnLimited.GetAppPath() + "ChallengeSyncLog.log", context + "\n");
+// #endif
 
                 IsUnSync = true;
 

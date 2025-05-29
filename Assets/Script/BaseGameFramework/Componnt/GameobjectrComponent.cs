@@ -1,6 +1,6 @@
 using Unity.Entities;
 
-public class GameobjectrComponent : IComponentData
+public class GameobjectComponent : IComponentData
 {
     public UnityEngine.GameObject gameObject;    
 }

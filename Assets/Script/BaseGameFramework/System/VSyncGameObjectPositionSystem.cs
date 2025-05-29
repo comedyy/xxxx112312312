@@ -4,13 +4,11 @@ public partial class VSyncGameObjectPositionSystem : SystemBase
 {
     protected override void OnUpdate()
     {
-        if (LocalFrame.Instance.CanInput)
+        var selfControllerId = BattleControllerMgr.Instance.GetController<SelfUserController>().selfControllerId;
+        Entities.WithoutBurst().ForEach((ComHeroId comHeroId, GameobjectComponent gameObjectrComponent, ref VTransform vTransform) =>
         {
-            return;
-        }
-
-        Entities.WithoutBurst().ForEach((GameobjectrComponent gameObjectrComponent, ref VTransform vTransform) =>
-        {
+            if (selfControllerId == comHeroId.id) return;
+            
             if (gameObjectrComponent.gameObject != null)
             {
                 gameObjectrComponent.gameObject.transform.position = vTransform.position;

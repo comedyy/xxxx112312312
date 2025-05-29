@@ -14,9 +14,9 @@ public class LocalFrame
     public InputCache _inputCache;
     public bool CanInput => _inputCache != null && _inputCache.CanInput;
 
-    public LocalFrame(BattleType battleType)
+    public LocalFrame(int controllerId, BattleType battleType)
     {
-        _localFrameInstance = BattleControlFactory.Create(battleType, _syncFrameCache, out _inputCache);
+        _localFrameInstance = BattleControlFactory.Create(controllerId, battleType, _syncFrameCache, out _inputCache);
         Instance = this;
     }
 

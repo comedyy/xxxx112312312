@@ -12,7 +12,7 @@ public partial class ChangeRvoParamSystem : SystemBase
 
     protected override void OnUpdate()
     {
-        var entity = SystemAPI.GetSingletonEntity<UserMoveSpeedComponet>();
+        var entity = SystemAPI.GetSingletonBuffer<BufferUserEntity>()[0].entity;
         var posHero = EntityManager.GetComponentData<LComPosition>(entity).Value;
 
         Entities.ForEach((ref RvoComponent rvo, in LComPosition position) =>

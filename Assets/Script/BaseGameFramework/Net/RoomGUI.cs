@@ -19,7 +19,7 @@ public class RoomGUI : MonoBehaviour
     public Func<(BattleStartMessage, ClientRoomShowInfo)> GetStartMessage;
     public Func<int, bool, (JoinMessage, ClientUserJoinShowInfo)> GetJoinMessage;
     public Action<BattleStartMessage> OnBattleStart;
-    uint userId 
+    public static uint userId 
     {
         get
         {
